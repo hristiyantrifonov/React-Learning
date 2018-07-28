@@ -4,7 +4,7 @@ import Person from './Person/Person.js';
 
 //The starting React component
 class App extends Component {
-    
+
   render() { //Every component needs to render some html
     return (
         // THIS IS NOT HTML IT IS JSX

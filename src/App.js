@@ -11,7 +11,8 @@ class App extends Component {
           {name: 'Max', age: 28},
           {name: 'Manu', age: 29},
           {name: 'Stephanie', age: 26}
-      ]
+      ],
+      otherState: 'some other value'
   }
 
   //Good practice to name in with handler (because we will use it as event handler)

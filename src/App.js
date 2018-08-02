@@ -16,12 +16,20 @@ class App extends Component {
   }
 
   //Good practice to name in with handler (because we will use it as event handler)
-  switchNameHandler = () => {
+  switchNameHandler = (newName) => {
       // console.log('Was clicked');
       // DON'T DO THIS this.state.persons[0].name = 'Maximilian'
       this.setState({persons: [
-              {name: 'Maximilian', age: 28},
+              {name: newName, age: 28},
               {name: 'Manu', age: 29},
+              {name: 'Stephanie', age: 17}
+          ]})
+  }
+
+  nameChangedHandler = (event) => {
+      this.setState({persons: [
+              {name: 'Max', age: 28},
+              {name: event.target.value, age: 29},
               {name: 'Stephanie', age: 17}
           ]})
   }
@@ -34,10 +42,22 @@ class App extends Component {
       <div className="App">
         <h1>Hi, I am a React App</h1>
         <p>This is really working!</p>
-        <button onClick={this.switchNameHandler} >Switch Name</button>
-        <Person name={this.state.persons[0].name} age={this.state.persons[0].age}/>
-        <Person name={this.state.persons[1].name} age={this.state.persons[1].age}>My Hobbies: Racing</Person>
-        <Person name={this.state.persons[2].name} age={this.state.persons[2].age}/>
+          {/*Another way of calling the function with arguments (bind is recommended*/}
+        <button onClick={() => this.switchNameHandler('Hris')} >Switch Name</button>
+        <Person
+            name={this.state.persons[0].name}
+            age={this.state.persons[0].age}/>
+        <Person
+            name={this.state.persons[1].name}
+            age={this.state.persons[1].age}
+            // We can call methods with this patters
+            //bind is a way to pass arguments
+            click={this.switchNameHandler.bind(this, 'Max!')}
+            changed ={this.nameChangedHandler}
+            >My Hobbies: Racing</Person>
+        <Person
+            name={this.state.persons[2].name}
+            age={this.state.persons[2].age}/>
       </div>
     );
 

@@ -4,8 +4,10 @@ import React from 'react'; //We need this for the return
 const person = (props) => {
     return (
         <div>
-            <p>I'm a {props.name} and I am {props.age} years old!</p>
+            <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
             <p>{props.children}</p>
+            {/*This 'changed' holds a reference to the nameChangedHandler and updates the state*/}
+            <input type="text" onChange={props.changed} value={props.name}/>
         </div>)
 };
 

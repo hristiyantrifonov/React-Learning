@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+
 import Person from './Person/Person.js';
 
 //The starting React component
@@ -24,7 +25,7 @@ class App extends Component {
               {name: 'Manu', age: 29},
               {name: 'Stephanie', age: 17}
           ]})
-  }
+  };
 
   nameChangedHandler = (event) => {
       this.setState({persons: [
@@ -32,9 +33,18 @@ class App extends Component {
               {name: event.target.value, age: 29},
               {name: 'Stephanie', age: 17}
           ]})
-  }
+  };
 
   render() { //Every component needs to render some html
+      //LECTURE 47 - we are writing JS here
+      const myStyle = {
+          backgroundColor: 'white',
+          font: 'inherit',
+          border: '1px solid blue',
+          padding: '8px',
+          cursor: 'pointer'
+      };
+
     return (
         // THIS IS NOT HTML IT IS JSX
         // JSX is just syntactic sugar for JavaScript, allowing you to write
@@ -43,7 +53,9 @@ class App extends Component {
         <h1>Hi, I am a React App</h1>
         <p>This is really working!</p>
           {/*Another way of calling the function with arguments (bind is recommended*/}
-        <button onClick={() => this.switchNameHandler('Hris')} >Switch Name</button>
+        <button
+            style={myStyle} //LECTURE 47
+            onClick={() => this.switchNameHandler('Hris')} >Switch Name</button>
         <Person
             name={this.state.persons[0].name}
             age={this.state.persons[0].age}/>

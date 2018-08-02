@@ -1,9 +1,10 @@
 import React from 'react'; //We need this for the return
 
+import './Person.css';
 // Best practice in making a Functional Component
 const person = (props) => {
     return (
-        <div>
+        <div className="Person">
             <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
             <p>{props.children}</p>
             {/*This 'changed' holds a reference to the nameChangedHandler and updates the state*/}

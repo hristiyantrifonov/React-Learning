@@ -18,22 +18,21 @@ class App extends Component {
   }
 
   //Good practice to name in with handler (because we will use it as event handler)
-  switchNameHandler = (newName) => {
-      // console.log('Was clicked');
-      // DON'T DO THIS this.state.persons[0].name = 'Maximilian'
-      this.setState({persons: [
-              {name: newName, age: 28},
-              {name: 'Manu', age: 29},
-              {name: 'Stephanie', age: 17}
-          ]})
-  };
-
   nameChangedHandler = (event) => {
       this.setState({persons: [
               {name: 'Max', age: 28},
               {name: event.target.value, age: 29},
               {name: 'Stephanie', age: 17}
           ]})
+  };
+
+  deletePersonHandler = (personIndex) => {
+    //ALWAYS UPDATE ARRAY IN AN IMMUTABLE FASHION WITHOUT MUTATING THE ORIGINAL STATE FIRST
+    // const persons = this.state.persons;  !!!THIS IS BAD PRACTICE IT DOES NOT COPY THE ARRAY BUT ONLY REFERENCE IT
+    // const persons = this.state.persons.slice(); //GOOD - SLICE WITHOUT ARGS IS MAKING A COPY
+    const persons = [...this.state.persons]; //AN ALTERNATIVE - SPREADS IT INSIDE THE EMPTY
+    persons.splice(personIndex, 1); //Remove one element from the array
+    this.setState({persons: persons});
   };
 
   togglePersonsHandler = () => {
@@ -51,6 +50,24 @@ class App extends Component {
           cursor: 'pointer'
       };
 
+      //LECTURE 51 - The elegant way
+      //The default
+      let persons = null;
+
+      //If showpersons is true we set the variable and render
+      if(this.state.showPersons) {
+          persons = (
+              <div>
+                  {/*Lecture 53 - mapping the state array into JSX elements to render*/}
+                  {this.state.persons.map((person, index) => {
+                      return <Person
+                          click = {() => this.deletePersonHandler(index)}
+                          name={person.name} age={person.age}/>
+                  })}
+              </div>
+          );
+      }
+
     return (
         // THIS IS NOT HTML IT IS JSX
         // JSX is just syntactic sugar for JavaScript, allowing you to write
@@ -63,28 +80,8 @@ class App extends Component {
             style={myStyle} //LECTURE 47
             onClick={this.togglePersonsHandler} >Toggle Persons</button>
 
-          {/*LECTURE 50 -
-            ternary expression (the showPersons is condition
-            if it is true then the div is rendered (this is all JS!)
-            */}
-          { this.state.showPersons ?
-            <div>
-            <Person
-                name={this.state.persons[0].name}
-                age={this.state.persons[0].age}/>
-            <Person
-                name={this.state.persons[1].name}
-                age={this.state.persons[1].age}
-                // We can call methods with this patters
-                //bind is a way to pass arguments
-                click={this.switchNameHandler.bind(this, 'Max!')}
-                changed ={this.nameChangedHandler}
-            >My Hobbies: Racing</Person>
-            <Person
-                name={this.state.persons[2].name}
-                age={this.state.persons[2].age}/>
-        </div> : null //50 - if the check above (show persons) is false, we do nothing
-          }
+          {/*LECTURE 51 - The reference of the div */}
+          {persons}
       </div>
     );
 

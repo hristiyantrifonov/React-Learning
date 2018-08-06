@@ -13,7 +13,8 @@ class App extends Component {
           {name: 'Manu', age: 29},
           {name: 'Stephanie', age: 26}
       ],
-      otherState: 'some other value'
+      otherState: 'some other value',
+      showPersons: false
   }
 
   //Good practice to name in with handler (because we will use it as event handler)
@@ -33,6 +34,11 @@ class App extends Component {
               {name: event.target.value, age: 29},
               {name: 'Stephanie', age: 17}
           ]})
+  };
+
+  togglePersonsHandler = () => {
+    const doesShow = this.state.showPersons;
+    this.setState({showPersons: !doesShow});
   };
 
   render() { //Every component needs to render some html
@@ -55,21 +61,30 @@ class App extends Component {
           {/*Another way of calling the function with arguments (bind is recommended*/}
         <button
             style={myStyle} //LECTURE 47
-            onClick={() => this.switchNameHandler('Hris')} >Switch Name</button>
-        <Person
-            name={this.state.persons[0].name}
-            age={this.state.persons[0].age}/>
-        <Person
-            name={this.state.persons[1].name}
-            age={this.state.persons[1].age}
-            // We can call methods with this patters
-            //bind is a way to pass arguments
-            click={this.switchNameHandler.bind(this, 'Max!')}
-            changed ={this.nameChangedHandler}
+            onClick={this.togglePersonsHandler} >Toggle Persons</button>
+
+          {/*LECTURE 50 -
+            ternary expression (the showPersons is condition
+            if it is true then the div is rendered (this is all JS!)
+            */}
+          { this.state.showPersons ?
+            <div>
+            <Person
+                name={this.state.persons[0].name}
+                age={this.state.persons[0].age}/>
+            <Person
+                name={this.state.persons[1].name}
+                age={this.state.persons[1].age}
+                // We can call methods with this patters
+                //bind is a way to pass arguments
+                click={this.switchNameHandler.bind(this, 'Max!')}
+                changed ={this.nameChangedHandler}
             >My Hobbies: Racing</Person>
-        <Person
-            name={this.state.persons[2].name}
-            age={this.state.persons[2].age}/>
+            <Person
+                name={this.state.persons[2].name}
+                age={this.state.persons[2].age}/>
+        </div> : null //50 - if the check above (show persons) is false, we do nothing
+          }
       </div>
     );
 

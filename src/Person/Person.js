@@ -1,10 +1,18 @@
 import React from 'react'; //We need this for the return
+import Radium from 'radium'
 
 import './Person.css';
 // Best practice in making a Functional Component
 const person = (props) => {
+
+    const style = {
+      '@media (min-width: 500px)' : {
+          width: '450px'
+      }
+    };
+
     return (
-        <div className="Person">
+        <div className="Person" style={style}>
             <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
             <p>{props.children}</p>
             {/*This 'changed' holds a reference to the nameChangedHandler and updates the state*/}
@@ -17,4 +25,4 @@ const person = (props) => {
 //STATE SHOULD BE ALTERED ONLY IN A FEW SELECTED COMPONENTS (CALLED
 //CONTAINERS e.g. App.js)
 
-export default person;
+export default Radium(person);

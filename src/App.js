@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
-
+import Radium, { StyleRoot } from 'radium' //The whole app has to be wrapped in StyleRoot for the media queries to work
 import Person from './Person/Person.js';
+
 
 //The starting React component
 class App extends Component {
@@ -9,21 +10,31 @@ class App extends Component {
   //We need to be careful with those states (can be unpredictable if many)
   state = {
       persons: [
-          {name: 'Max', age: 28},
-          {name: 'Manu', age: 29},
-          {name: 'Stephanie', age: 26}
+          { id: 'dsf23', name: 'Max', age: 28},
+          { id: 'fdsfsd2', name: 'Manu', age: 29},
+          { id: 'fgfw87', name: 'Stephanie', age: 26}
       ],
       otherState: 'some other value',
       showPersons: false
   }
 
   //Good practice to name in with handler (because we will use it as event handler)
-  nameChangedHandler = (event) => {
-      this.setState({persons: [
-              {name: 'Max', age: 28},
-              {name: event.target.value, age: 29},
-              {name: 'Stephanie', age: 17}
-          ]})
+  nameChangedHandler = (event, id) => {
+      const personIndex = this.state.persons.findIndex(p => {
+          return p.id === id;
+      });
+
+      //THE MOST EFFICIENT WAY WITHOUT MUTATING THE STATE
+      const person = {
+          ...this.state.persons[personIndex]
+      };
+
+      person.name = event.target.value;
+
+      const persons = [...this.state.persons];
+      persons[personIndex] = person;
+
+      this.setState({persons: persons});
   };
 
   deletePersonHandler = (personIndex) => {
@@ -43,18 +54,24 @@ class App extends Component {
   render() { //Every component needs to render some html
       //LECTURE 47 - we are writing JS here
       const myStyle = {
-          backgroundColor: 'white',
+          backgroundColor: 'green',
+          color: 'white',
           font: 'inherit',
           border: '1px solid blue',
           padding: '8px',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          ':hover': {
+              backgroundColor: 'lightgreen',
+              color: 'black'
+          }
       };
 
       //LECTURE 51 - The elegant way
-      //The default
+      //The default variable
+      //USE VARIABLES
       let persons = null;
 
-      //If showpersons is true we set the variable and render
+      //If showPersons is true we set the variable and render
       if(this.state.showPersons) {
           persons = (
               <div>
@@ -62,27 +79,46 @@ class App extends Component {
                   {this.state.persons.map((person, index) => {
                       return <Person
                           click = {() => this.deletePersonHandler(index)}
-                          name={person.name} age={person.age}/>
+                          name={person.name}
+                          age={person.age}
+                          //In key we put some ID to help render more efficiently
+                          //React compares this property on every render to only rerender elements that did change
+                          key={person.id}
+                          changed={(event) => this.nameChangedHandler(event, person.id)}/>
                   })}
               </div>
           );
+
+          myStyle.backgroundColor = 'red';
+          myStyle[':hover'] = {
+              backgroundColor: 'salmon',
+              color: 'black'
+          }
       }
 
-    return (
-        // THIS IS NOT HTML IT IS JSX
-        // JSX is just syntactic sugar for JavaScript, allowing you to write
-        // HTMLish code instead of nested React.createElement(...) calls.
-      <div className="App">
-        <h1>Hi, I am a React App</h1>
-        <p>This is really working!</p>
-          {/*Another way of calling the function with arguments (bind is recommended*/}
-        <button
-            style={myStyle} //LECTURE 47
-            onClick={this.togglePersonsHandler} >Toggle Persons</button>
+    //LECTURE 63
+    let classes = [];
 
-          {/*LECTURE 51 - The reference of the div */}
-          {persons}
-      </div>
+    if (this.state.persons.length <= 2){
+        classes.push('red'); //classes = ['red']
+    }
+    if (this.state.persons.length <= 1){
+        classes.push('bold'); //classes = ['red', 'bold']
+    }
+
+    return (
+        <StyleRoot> 
+            <div className="App">
+                <h1>Hi, I am a React App</h1>
+                <p className={classes.join(' ')} >This is really working!</p>
+                <button
+                    style={myStyle}
+                    onClick={this.togglePersonsHandler} >Toggle Persons</button>
+
+                {/*LECTURE 51 - The reference of the div */}
+                {persons}
+                </div>
+        </StyleRoot>
     );
 
       // The above compiles to this, although it looks like HTML
@@ -90,4 +126,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Radium(App); //Higher order component - injecting some extra functionality

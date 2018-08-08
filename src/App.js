@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import Radium, { StyleRoot } from 'radium' //The whole app has to be wrapped in StyleRoot for the media queries to work
 import Person from './Person/Person.js';
 
 
@@ -59,11 +58,7 @@ class App extends Component {
           font: 'inherit',
           border: '1px solid blue',
           padding: '8px',
-          cursor: 'pointer',
-          ':hover': {
-              backgroundColor: 'lightgreen',
-              color: 'black'
-          }
+          cursor: 'pointer'
       };
 
       //LECTURE 51 - The elegant way
@@ -90,10 +85,6 @@ class App extends Component {
           );
 
           myStyle.backgroundColor = 'red';
-          myStyle[':hover'] = {
-              backgroundColor: 'salmon',
-              color: 'black'
-          }
       }
 
     //LECTURE 63
@@ -107,18 +98,16 @@ class App extends Component {
     }
 
     return (
-        <StyleRoot> 
-            <div className="App">
-                <h1>Hi, I am a React App</h1>
-                <p className={classes.join(' ')} >This is really working!</p>
-                <button
-                    style={myStyle}
-                    onClick={this.togglePersonsHandler} >Toggle Persons</button>
+        <div className="App">
+            <h1>Hi, I am a React App</h1>
+            <p className={classes.join(' ')} >This is really working!</p>
+            <button
+                style={myStyle}
+                onClick={this.togglePersonsHandler} >Toggle Persons</button>
 
-                {/*LECTURE 51 - The reference of the div */}
-                {persons}
-                </div>
-        </StyleRoot>
+            {/*LECTURE 51 - The reference of the div */}
+            {persons}
+        </div>
     );
 
       // The above compiles to this, although it looks like HTML
@@ -126,4 +115,4 @@ class App extends Component {
   }
 }
 
-export default Radium(App); //Higher order component - injecting some extra functionality
+export default App; //Higher order component - injecting some extra functionality

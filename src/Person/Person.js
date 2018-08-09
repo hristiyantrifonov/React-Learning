@@ -1,11 +1,16 @@
 import React from 'react'; //We need this for the return
 
-import './Person.css';
+import cssClasses from './Person.css';
 // Best practice in making a Functional Component
 const person = (props) => {
+    const rnd = Math.random();
+
+    if (rnd > 0.7) {
+        throw new Error('Something went wrong');
+    }
 
     return (
-        <div className="Person">
+        <div className={cssClasses.Person}>
             <p onClick={props.click}>I'm {props.name} and I am {props.age} years old!</p>
             <p>{props.children}</p>
             {/*This 'changed' holds a reference to the nameChangedHandler and updates the state*/}

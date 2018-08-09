@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import './App.css';
+import cssClasses from './App.css';
 import Person from './Person/Person.js';
-
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary'
 
 //The starting React component
 class App extends Component {
@@ -51,20 +51,9 @@ class App extends Component {
   };
 
   render() { //Every component needs to render some html
-      //LECTURE 47 - we are writing JS here
-      const myStyle = {
-          backgroundColor: 'green',
-          color: 'white',
-          font: 'inherit',
-          border: '1px solid blue',
-          padding: '8px',
-          cursor: 'pointer'
-      };
 
-      //LECTURE 51 - The elegant way
-      //The default variable
-      //USE VARIABLES
       let persons = null;
+      let btnClass = '';
 
       //If showPersons is true we set the variable and render
       if(this.state.showPersons) {
@@ -72,37 +61,38 @@ class App extends Component {
               <div>
                   {/*Lecture 53 - mapping the state array into JSX elements to render*/}
                   {this.state.persons.map((person, index) => {
-                      return <Person
+                      return <ErrorBoundary key={person.id}>
+                          <Person
                           click = {() => this.deletePersonHandler(index)}
                           name={person.name}
                           age={person.age}
                           //In key we put some ID to help render more efficiently
                           //React compares this property on every render to only rerender elements that did change
-                          key={person.id}
-                          changed={(event) => this.nameChangedHandler(event, person.id)}/>
+
+                          changed={(event) => this.nameChangedHandler(event, person.id)}/> </ErrorBoundary>
                   })}
               </div>
           );
 
-          myStyle.backgroundColor = 'red';
+          btnClass = cssClasses.Red;
       }
 
     //LECTURE 63
-    let classes = [];
+    const classes = [];
 
     if (this.state.persons.length <= 2){
-        classes.push('red'); //classes = ['red']
+        classes.push( cssClasses.red );
     }
     if (this.state.persons.length <= 1){
-        classes.push('bold'); //classes = ['red', 'bold']
+        classes.push( cssClasses.bold );
     }
 
     return (
-        <div className="App">
+        <div className={cssClasses.App}>
             <h1>Hi, I am a React App</h1>
             <p className={classes.join(' ')} >This is really working!</p>
             <button
-                style={myStyle}
+                className={btnClass}
                 onClick={this.togglePersonsHandler} >Toggle Persons</button>
 
             {/*LECTURE 51 - The reference of the div */}

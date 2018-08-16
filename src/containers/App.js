@@ -6,9 +6,10 @@ import Cockpit from '../components/Cockpit/Cockpit';
 import Aux from '../hoc/Auxiliary'; //HOC
 import withClass from '../hoc/withClass'
 
-//The starting React component (IT IS A CONTAINER)
-//THIS IS CORRECT STRUCTURE BECAUSE
-//CONTAINERS SHOULD ONLY MANAGE THE STATE AND ALTERS THE STATE
+//LECTURE 103 - Context
+export const AuthContext = React.createContext(false); //default value - false
+
+
 class App extends PureComponent {
 
   //Lifecycle Hooks
@@ -37,6 +38,20 @@ class App extends PureComponent {
       console.log('[UPDATE App.js] Inside componentWillUpdate', nextProps, nextState)
   }
 
+  //NEW LIFECYCLE HOOK
+  //Fires when props are updated and gives opportunity to change state as well
+  static getDerivedStateFromProps(nextProps, prevState){
+    console.log("[UPDATE App.js] Inside getDerivedStateFromProps", nextProps, prevState)
+
+      return prevState;
+  }
+
+  //NEW LIFECYCLE HOOK
+  //Allow to get a snapshot of the DOM before it changes (this executes right before DOM update)
+  getSnapshotBeforeUpdate(){
+      console.log("[UPDATE App.js] Inside getSnapshotBeforeUpdate")
+  }
+
   componentDidUpdate(){
       console.log('[UPDATE App.js] Inside componentDidUpdate')
   }
@@ -48,7 +63,9 @@ class App extends PureComponent {
           { id: 'fgfw87', name: 'Stephanie', age: 26}
       ],
       otherState: 'some other value',
-      showPersons: false
+      showPersons: false,
+      toggleClickCounter: 0,
+      authenticated: false
   }
 
   nameChangedHandler = (event, id) => {
@@ -80,8 +97,20 @@ class App extends PureComponent {
 
   togglePersonsHandler = () => {
     const doesShow = this.state.showPersons;
-    this.setState({showPersons: !doesShow});
+    //LECTURE 98 - Using setState correctly
+    //THIS IS THE BEST WAY TO MUTATE STATE WHEN YOU RELY ON PREVIOUS STATE
+    this.setState( (prevState, props) => {
+        return {
+            showPersons: !doesShow,
+            toggleClickCounter: prevState.toggleClickCounter + 1
+        }
+    });
+
   };
+
+  loginHandler = () => {
+    this.setState({authenticated: true});
+  }
 
   render() {
       console.log('[App.js] Inside render()');
@@ -103,9 +132,9 @@ class App extends PureComponent {
                 appTitle={this.props.title}
                 showPersons={this.state.showPersons}
                 persons={this.state.persons}
+                login={this.loginHandler}
                 clicked={this.togglePersonsHandler}/>
-
-            {persons}
+                <AuthContext.Provider value={this.state.authenticated}> {persons} </AuthContext.Provider>
         </Aux>
     );
   }

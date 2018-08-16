@@ -48,6 +48,7 @@ class App extends PureComponent {
 
   //NEW LIFECYCLE HOOK
   //Allow to get a snapshot of the DOM before it changes (this executes right before DOM update)
+  //Could be used to save scroll position and return the user to where he was afterwards (e.g. in componentDidUpdate())
   getSnapshotBeforeUpdate(){
       console.log("[UPDATE App.js] Inside getSnapshotBeforeUpdate")
   }

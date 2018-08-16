@@ -1,6 +1,7 @@
 import React, {Component} from 'react'; //We need this for the return
 
 import cssClasses from './Person.css';
+import WithClass from '../../../hoc/WithClass'; //HOC
 // Best practice in making a Functional Component
 
 class Person extends Component{
@@ -20,12 +21,12 @@ class Person extends Component{
     render (){
         console.log('[Person.js] Inside render()');
         return (
-            <div className={cssClasses.Person}>
+            <WithClass classes={cssClasses.Person}>
                 <p onClick={this.props.click}>I'm {this.props.name} and I am {this.props.age} years old!</p>
                 <p>{this.props.children}</p>
                 {/*This 'changed' holds a reference to the nameChangedHandler and updates the state*/}
                 <input type="text" onChange={this.props.changed} value={this.props.name}/>
-            </div>)
+            </WithClass>)
     }
 }
 

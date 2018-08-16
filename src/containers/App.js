@@ -3,6 +3,7 @@ import React, { PureComponent } from 'react';
 import cssClasses from './App.css';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
+import WithClass from '../hoc/WithClass'; //HOC
 
 //The starting React component (IT IS A CONTAINER)
 //THIS IS CORRECT STRUCTURE BECAUSE
@@ -95,7 +96,7 @@ class App extends PureComponent {
       }
 
     return (
-        <div className={cssClasses.App}>
+        <WithClass classes={cssClasses.App}>
             <button onClick={() => {this.setState({showPersons: true})}}>Show Persons</button>
             <Cockpit
                 appTitle={this.props.title}
@@ -104,7 +105,7 @@ class App extends PureComponent {
                 clicked={this.togglePersonsHandler}/>
 
             {persons}
-        </div>
+        </WithClass>
     );
   }
 }
